@@ -9,13 +9,15 @@ import (
 
 type (
 	reader struct {
-		regex string
+		regex     string
+		regexDiff string
 	}
 )
 
 func NewReader() *reader {
 	return &reader{
-		regex: `\t(modified|deleted|"new file"):\s*(.*)`,
+		regex:     `\t(modified|deleted|"new file"):\s*(.*)`,
+		regexDiff: `diff --git a\/(.*) b\/(.*)`,
 	}
 }
 
@@ -24,18 +26,23 @@ func (r reader) Status() ([]Status, error) {
 
 	// TODO add "new file" also
 	regularExpression := regexp.MustCompile(r.regex)
+	regularExpressionDiff := regexp.MustCompile(r.regexDiff)
+
 	scanner := bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {
 		res := regularExpression.FindStringSubmatch(scanner.Text())
-
-		if len(res) == 0 {
-			continue
+		if len(res) > 0 {
+			list = append(list, Status{
+				File: res[2],
+			})
 		}
 
-		list = append(list, Status{
-			Operation: res[1],
-			File:      res[2],
-		})
+		res2 := regularExpressionDiff.FindStringSubmatch(scanner.Text())
+		if len(res2) > 0 {
+			list = append(list, Status{
+				File: res2[1],
+			})
+		}
 	}
 
 	if scanner.Err() != nil {

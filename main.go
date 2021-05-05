@@ -7,11 +7,10 @@ import (
 )
 
 func main() {
+	// https://readme.so/it
 	hasError := false
 	var wg sync.WaitGroup
 	reader := NewReader()
-
-	log.Println("Inizio")
 
 	// READ configurations
 	configurations, err := reader.Configurations()
@@ -25,17 +24,23 @@ func main() {
 		panic(err)
 	}
 
+	log.Println("List of changed files")
+	for _, status := range list {
+		log.Println(" - ", status.File)
+	}
+
 	// decide which commands to execute
 	commands := Commands(list, configurations)
+
+	counter := 0
 
 	// Execute commands in concurrency
 	for _, cfg := range commands {
 		wg.Add(1)
-		go worker(cfg, &hasError, &wg)
+		go worker(cfg, &hasError, &counter, len(commands), &wg)
 	}
 
 	wg.Wait()
-	log.Println("Fine")
 
 	if hasError {
 		os.Exit(1)

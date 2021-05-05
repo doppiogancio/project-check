@@ -2,8 +2,7 @@ package main
 
 type (
 	Status struct {
-		Operation string `json:"operation"`
-		File      string `json:"file"`
+		File string `json:"file"`
 	}
 
 	Command struct {
