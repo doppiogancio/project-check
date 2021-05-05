@@ -1,0 +1,56 @@
+configurations:
+  - name: Catalog Client CS
+    directory: catalog-client/
+    regex: "catalog-client/.*"
+    command:
+      name: make
+      arg: cs-check
+
+  - name: WILLIAM CS
+    directory: william/
+    regex: "william/.*"
+    command:
+      name: make
+      arg: cs-check
+
+  - name: WILLIAM PHPUNIT
+    directory: william/
+    regex: "william/.*"
+    command:
+      name: make
+      arg: tests
+
+  - name: WILLIAM PHPSTAN
+    directory: william/
+    regex: "william/.*"
+    command:
+      name: make
+      arg: phpstan
+
+  - name: YVES CS
+    directory: yves/
+    regex: "yves/.*"
+    command:
+      name: make
+      arg: cs-check
+
+  - name: YVES PHPUNIT
+    directory: yves/
+    regex: "yves/.*"
+    command:
+      name: make
+      arg: tests
+
+  - name: YVES PHPSTAN
+    directory: yves/
+    regex: "yves/.*"
+    command:
+      name: make
+      arg: phpstan
+
+  - name: XYLA CS
+    directory: xyla/
+    regex: "xyla/.*"
+    command:
+      name: make
+      arg: cs-check
